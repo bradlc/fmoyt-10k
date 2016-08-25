@@ -54,7 +54,19 @@ gulp.task('js', () => {
   });
 });
 
+// Templates
+const inline = require('gulp-inline-source');
+const htmlmin = require('gulp-htmlmin');
+
+gulp.task('templates', ['css'], () => {
+  return gulp.src('./src/templates/*.html')
+    .pipe(inline())
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(gulp.dest('./templates'));
+});
+
 gulp.task('default', () => {
-  gulp.watch('src/css/**/*', ['css:lint', 'css']);
+  gulp.watch('src/css/**/*', ['css:lint', 'templates']);
   gulp.watch('src/js/**/*', ['js:lint', 'js']);
+  gulp.watch('src/templates/*', ['templates']);
 });
