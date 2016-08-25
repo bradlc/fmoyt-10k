@@ -27,6 +27,27 @@ gulp.task('css', () => {
     .pipe(gulp.dest('./webroot/css'));
 });
 
+// JavaScript
+const rollup = require('rollup').rollup;
+const babel = require('rollup-plugin-babel');
+
+gulp.task('js', () => {
+  return rollup({
+    entry: './src/js/main.js',
+    plugins: [
+      babel({
+        exclude: 'node_modules/**',
+      }),
+    ],
+  }).then(bundle => {
+    return bundle.write({
+      format: 'iife',
+      dest: './webroot/js/main.js',
+    });
+  });
+});
+
 gulp.task('default', () => {
   gulp.watch('src/css/**/*', ['css:lint', 'css']);
+  gulp.watch('src/js/**/*', ['js']);
 });
