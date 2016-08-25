@@ -56,5 +56,5 @@ gulp.task('js', () => {
 
 gulp.task('default', () => {
   gulp.watch('src/css/**/*', ['css:lint', 'css']);
-  gulp.watch('src/js/**/*', ['js']);
+  gulp.watch('src/js/**/*', ['js:lint', 'js']);
 });
