@@ -44,6 +44,7 @@ gulp.task('js', () => {
   return rollup({
     entry: './src/js/main.js',
     sourceMap: true,
+    format: 'iife',
     plugins: [
       babel({
         exclude: 'node_modules/**',
