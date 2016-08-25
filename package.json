@@ -1,0 +1,27 @@
+{
+  "name": "fmoyt-10k",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bradlc/fmoyt-10k.git"
+  },
+  "author": "Brad Cornes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bradlc/fmoyt-10k/issues"
+  },
+  "homepage": "https://github.com/bradlc/fmoyt-10k#readme",
+  "devDependencies": {
+    "autoprefixer": "^6.4.0",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.12",
+    "gulp-postcss": "^6.1.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "precss": "^1.4.0"
+  }
+}
