@@ -7,6 +7,16 @@ const postcss = require('gulp-postcss');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 const cleancss = require('gulp-clean-css');
+const stylelint = require('gulp-stylelint');
+
+gulp.task('css:lint', () => {
+  return gulp.src('./src/css/**/*.css')
+    .pipe(stylelint({
+      reporters: [
+        { formatter: 'string', console: true }
+      ]
+    }));
+});
 
 gulp.task('css', () => {
   return gulp.src('./src/css/main.css')
@@ -18,5 +28,5 @@ gulp.task('css', () => {
 });
 
 gulp.task('default', () => {
-  gulp.watch('src/css/**/*', ['css']);
+  gulp.watch('src/css/**/*', ['css:lint', 'css']);
 });
