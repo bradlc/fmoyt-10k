@@ -30,6 +30,13 @@ gulp.task('css', () => {
 // JavaScript
 const rollup = require('rollup').rollup;
 const babel = require('rollup-plugin-babel');
+const eslint = require('gulp-eslint');
+
+gulp.task('js:lint', () => {
+  return gulp.src('./src/js/**/*.js')
+    .pipe(eslint())
+    .pipe(eslint.format())
+});
 
 gulp.task('js', () => {
   return rollup({
