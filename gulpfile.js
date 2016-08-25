@@ -72,6 +72,8 @@ gulp.task('templates', ['css'], () => {
     .pipe(gulp.dest('./templates'));
 });
 
+gulp.task('build', ['templates', 'js']);
+
 gulp.task('default', () => {
   gulp.watch('src/css/**/*', ['css:lint', 'templates']);
   gulp.watch('src/js/**/*', ['js:lint', 'js']);
