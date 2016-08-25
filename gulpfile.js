@@ -28,8 +28,10 @@ gulp.task('css', () => {
 });
 
 // JavaScript
-const rollup = require('rollup').rollup;
+const rollup = require('rollup-stream');
 const babel = require('rollup-plugin-babel');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
 const eslint = require('gulp-eslint');
 
 gulp.task('js:lint', () => {
@@ -41,17 +43,18 @@ gulp.task('js:lint', () => {
 gulp.task('js', () => {
   return rollup({
     entry: './src/js/main.js',
+    sourceMap: true,
     plugins: [
       babel({
         exclude: 'node_modules/**',
       }),
     ],
-  }).then(bundle => {
-    return bundle.write({
-      format: 'iife',
-      dest: './webroot/js/main.js',
-    });
-  });
+  })
+  .pipe(source('main.js', './src/js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({ loadMaps: true }))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('./webroot/js'));
 });
 
 // Templates
