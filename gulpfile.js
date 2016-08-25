@@ -32,6 +32,7 @@ const rollup = require('rollup-stream');
 const babel = require('rollup-plugin-babel');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
+const uglify = require('gulp-uglify');
 const eslint = require('gulp-eslint');
 
 gulp.task('js:lint', () => {
@@ -55,6 +56,7 @@ gulp.task('js', () => {
   .pipe(source('main.js', './src/js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({ loadMaps: true }))
+  .pipe(uglify())
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./webroot/js'));
 });
