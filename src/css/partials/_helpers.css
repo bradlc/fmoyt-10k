@@ -1,3 +1,4 @@
 .mono {
   font-family: $font-family-mono;
+  letter-spacing: 0.08em;
 }

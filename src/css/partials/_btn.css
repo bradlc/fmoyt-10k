@@ -1,0 +1,49 @@
+.btn {
+  appearance: none;
+  display: inline-block;
+  vertical-align: top;
+  border: 2px solid;
+  border-radius: 3px;
+  padding: 0 16px;
+  line-height: 1;
+  height: 44px;
+  text-decoration: none;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  font-size: 13px;
+  font-family: $font-family-mono;
+}
+
+a.btn {
+  line-height: 40px;
+}
+
+.btn--primary {
+  background: #5767ff;
+  border-color: transparent;
+}
+
+.btn--secondary {
+  background: none;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn--icon {
+  position: relative;
+  padding-left: 40px;
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    width: 18px;
+    height: 40px;
+    fill: #fff;
+  }
+
+  &.btn--secondary svg {
+    fill: rgba(255, 255, 255, 0.3);
+  }
+}
