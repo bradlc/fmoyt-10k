@@ -59,12 +59,13 @@ function getMovieInfo(posts) {
 
     reqs.push(new Promise((resolve, reject) => {
       const wait = index * 300;
+      const youtubeId = getYouTubeIdFromUrl(post.data.url);
       setTimeout(() => {
         request(apiurl, (err, res, body) => {
           if (err || res.statusCode !== 200) {
             reject(err);
           }
-          resolve(Object.assign({}, JSON.parse(body), { youtube_id: getYouTubeIdFromUrl(post.data.url) }));
+          resolve(Object.assign({}, JSON.parse(body), { youtube_id: youtubeId }));
         });
       }, wait);
     }));
