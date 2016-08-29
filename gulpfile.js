@@ -61,21 +61,21 @@ gulp.task('js', () => {
   .pipe(gulp.dest('./webroot/js'));
 });
 
-// Templates
+// Views
 const inline = require('gulp-inline-source');
 const htmlmin = require('gulp-htmlmin');
 
-gulp.task('templates', ['css'], () => {
-  return gulp.src('./src/templates/*.html')
+gulp.task('views', ['css'], () => {
+  return gulp.src('./src/views/**/*.handlebars')
     .pipe(inline())
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest('./templates'));
+    .pipe(gulp.dest('./views'));
 });
 
-gulp.task('build', ['templates', 'js']);
+gulp.task('build', ['views', 'js']);
 
 gulp.task('default', ['build'], () => {
-  gulp.watch('src/css/**/*', ['css:lint', 'templates']);
+  gulp.watch('src/css/**/*', ['css:lint', 'views']);
   gulp.watch('src/js/**/*', ['js:lint', 'js']);
-  gulp.watch('src/templates/*', ['templates']);
+  gulp.watch('src/views/**/*', ['views']);
 });
