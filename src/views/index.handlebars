@@ -2,7 +2,7 @@
   {{#each movies}}
   <li class="grid-item">
     <a href="https://youtu.be/{{youtube_id}}">
-      <img src="https://image.tmdb.org/t/p/w640{{poster}}" alt="" width="640" height="960">
+      <div class="grid-item__poster" style="background-image:url('https://image.tmdb.org/t/p/w640{{poster}}');"></div>
       <h3>{{title}}</h3>
       <time datetime="2016" class="mono">{{year release_date}}</time>
     </a>

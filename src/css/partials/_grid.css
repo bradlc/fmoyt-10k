@@ -20,7 +20,7 @@
   &:focus {
     outline: 0;
 
-    img {
+    .grid-item__poster {
       outline: 5px solid #5767ff;
     }
   }
@@ -41,9 +41,12 @@
   }
 }
 
-.grid-item img {
+.grid-item__poster {
   border-radius: 3px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background-size: cover;
+  background-position: center center;
+  padding-top: calc((960 / 640) * 100%);
 }
 
 .grid-item h3 {
