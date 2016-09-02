@@ -1,5 +1,4 @@
-.movie {
-  display: none;
+.movie-container {
   position: fixed;
   z-index: 10;
   top: 0;
@@ -7,41 +6,38 @@
   bottom: 0;
   left: 0;
   background: rgba(34, 43, 49, 0.98);
+  display: flex;
+}
+
+.movie {
+  margin: auto;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+
+  &:before {
+    content: '';
+    display: block;
+    padding-top: calc((960 / 640) * 100%);
+  }
 }
 
 .movie-inner {
-  max-width: 1000px;
-  margin: 100px auto;
-  font-size: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: color(rgb(34, 43, 49) tint(5%));
+  border-radius: 5px;
+  padding: 35px;
 }
-
-.movie-left,
-.movie-right {
-  display: inline-block;
-  vertical-align: top;
-  font-size: $font-size;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-.movie-left {
-  width: 30%;
-}
-
-.movie-right {
-  width: 70%;
-}
-
 
 .movie h1 {
   font-size: 44px;
   font-weight: 400;
   line-height: 1.1;
   margin-bottom: 30px;
-}
-
-.movie img {
-  border-radius: 3px;
 }
 
 .movie__overview {
