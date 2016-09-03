@@ -5,7 +5,6 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(34, 43, 49, 0.98);
   display: none;
 }
 
@@ -26,7 +25,7 @@
     padding-top: calc((960 / 640) * 100%);
   }
 
-  &.animate {
+  .movie-container--animate & {
     transition: all 0.4s cubic-bezier(0.42, 0.01, 0.23, 1);
   }
 }
@@ -41,7 +40,7 @@
   perspective: 500px;
   transform-style: preserve-3d;
 
-  &.animate {
+  .movie-container--animate & {
     transition: all 0.4s cubic-bezier(0.42, 0.01, 0.23, 1);
   }
 }
