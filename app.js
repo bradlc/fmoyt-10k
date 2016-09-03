@@ -16,6 +16,7 @@ app.engine('handlebars', hbs({
   },
 }));
 app.set('view engine', 'handlebars');
+app.use(express.static('webroot'));
 
 const jwtSecret = 'yolo';
 
