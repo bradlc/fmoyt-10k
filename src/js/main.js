@@ -2,6 +2,7 @@ const movieContainer = document.querySelector('.js-movie-container');
 const movie = document.querySelector('.js-movie');
 const movieInner = document.querySelector('.js-movie-inner');
 const movieFront = document.querySelector('.js-movie-front');
+const movieBack = document.querySelector('.js-movie-back');
 const movieBackPoster = document.querySelector('.js-movie-back-poster');
 
 const items = document.querySelectorAll('.js-grid-item');
@@ -28,6 +29,11 @@ for (let i = 0; i < items.length; i++) {
 
     movie.style.transform = `translate(${left}px, ${top}px)`;
     movieInner.style.transform = `scale(${scale})`;
+
+    // border radius
+    const borderRadius = 3 * (1 / scale);
+    movieFront.style.borderRadius = `${borderRadius}px`;
+    movieBack.style.borderRadius = `${borderRadius}px`;
 
     e.target.closest('.js-grid-item').style.opacity = 0;
 
