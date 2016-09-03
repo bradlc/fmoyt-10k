@@ -2,6 +2,7 @@ let modalActive = false;
 let activeItem = null;
 
 const movieContainer = document.querySelector('.js-movie-container');
+const movieContainerBg = document.querySelector('.js-movie-container-bg');
 const movie = document.querySelector('.js-movie');
 const movieInner = document.querySelector('.js-movie-inner');
 const movieFront = document.querySelector('.js-movie-front');
@@ -61,10 +62,12 @@ function flip(e) {
       movieContainer.classList.add('movie-container--animate');
       movieInner.style.transform = 'none';
       movie.style.transform = 'none';
+      movieContainerBg.style.opacity = 1;
       movie.classList.add('movie--flipped');
     });
   } else {
     movie.classList.remove('movie--flipped');
+    movieContainerBg.style.opacity = 0;
     movie.addEventListener('transitionend', once(() => {
       poster.style.opacity = 1;
       movieContainer.classList.remove('movie-container--animate');

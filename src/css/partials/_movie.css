@@ -12,6 +12,20 @@
   display: flex;
 }
 
+.movie-container__bg {
+  background: rgba(34, 43, 49, 0.98);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+
+  .movie-container--animate & {
+    transition: opacity 0.4s;
+  }
+}
+
 .movie {
   margin: auto;
   position: relative;
