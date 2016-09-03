@@ -35,7 +35,7 @@ for (let i = 0; i < items.length; i++) {
     movieFront.style.borderRadius = `${borderRadius}px`;
     movieBack.style.borderRadius = `${borderRadius}px`;
 
-    e.target.closest('.js-grid-item').style.opacity = 0;
+    poster.style.opacity = 0;
 
     window.requestAnimationFrame(() => {
       movieContainer.classList.add('movie-container--animate');
