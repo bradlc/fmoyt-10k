@@ -33,9 +33,9 @@ function flip(e) {
 
   // update poster
   if (!modalActive) {
-    const image = poster.style.backgroundImage;
-    movieFront.style.backgroundImage = image;
-    movieBackPoster.style.backgroundImage = image;
+    const image = poster.querySelector('img').src;
+    movieFront.style.backgroundImage = `url('${image}')`;
+    movieBackPoster.style.backgroundImage = `url('${image}')`;
 
     movieContainer.classList.add('movie-container--visible');
   }
