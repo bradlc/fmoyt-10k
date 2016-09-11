@@ -2,12 +2,14 @@
 
 const fs = require('fs');
 const express = require('express');
+const compression = require('compression');
 const hbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const write = require('write-file-atomic');
 const jwt = require('jsonwebtoken');
 
 const app = express();
+app.use(compression());
 app.use(bodyParser.json());
 app.engine('handlebars', hbs({
   defaultLayout: 'main',
