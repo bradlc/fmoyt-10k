@@ -15,6 +15,7 @@ const UP = 38;
 const RIGHT = 39;
 const DOWN = 40;
 const LEFT = 37;
+const ESC = 27;
 
 /* eslint-disable */
 function once(fn, context) {
@@ -131,6 +132,12 @@ document.addEventListener('keydown', e => {
   }
   if (newIndex >= 0 && newIndex < items.length) {
     items[newIndex].focus();
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.which === ESC && modalActive) {
+    flip.bind(activeItem)();
   }
 });
 
