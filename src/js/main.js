@@ -1,6 +1,9 @@
+import './_inert.js';
+
 let modalActive = false;
 let activeItem = null;
 
+const main = document.querySelector('.js-main');
 const movieContainer = document.querySelector('.js-movie-container');
 const movieContainerBg = document.querySelector('.js-movie-container-bg');
 const movie = document.querySelector('.js-movie');
@@ -16,6 +19,8 @@ const RIGHT = 39;
 const DOWN = 40;
 const LEFT = 37;
 const ESC = 27;
+
+movieContainer.inert = true;
 
 /* eslint-disable */
 function once(fn, context) {
@@ -65,6 +70,9 @@ function flip(e) {
 
     poster.style.opacity = 0;
 
+    movieContainer.inert = false;
+    main.inert = true;
+
     window.requestAnimationFrame(() => {
       movieContainer.classList.add('movie-container--animate');
       movieInner.style.transform = 'none';
@@ -81,6 +89,9 @@ function flip(e) {
       movieContainer.classList.remove('movie-container--visible');
       movie.style.transform = 'none';
       movieInner.style.transform = 'none';
+
+      movieContainer.inert = true;
+      main.inert = false;
     }));
   }
 
