@@ -37,6 +37,22 @@ function once(fn, context) {
     return result;
   };
 }
+
+function debounce(func, wait, immediate) {
+  let timeout;
+  return function() {
+    const context = this;
+    const args = arguments;
+    const later = function later() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
 /* eslint-enable */
 
 function flip(e) {
@@ -122,15 +138,22 @@ movieContainer.addEventListener('click', () => {
 /**
  * Keyboard nav
  */
-let top = null;
-let perRow;
-for (perRow = 0; perRow < items.length; perRow++) {
-  const newTop = items[perRow].getBoundingClientRect().top;
-  if (top !== null && newTop !== top) {
-    break;
+function getPerRow() {
+  let top = null;
+  let i;
+  for (i = 0; i < items.length; i++) {
+    const newTop = items[i].getBoundingClientRect().top;
+    if (top !== null && newTop !== top) {
+      break;
+    }
+    top = newTop;
   }
-  top = newTop;
+  return i;
 }
+let perRow = getPerRow();
+window.addEventListener('resize', debounce(() => {
+  perRow = getPerRow();
+}, 250));
 
 document.addEventListener('keydown', e => {
   if (e.which !== UP && e.which !== RIGHT && e.which !== DOWN && e.which !== LEFT) return;
