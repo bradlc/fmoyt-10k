@@ -11,6 +11,11 @@ const movieBackPoster = document.querySelector('.js-movie-back-poster');
 
 const items = document.querySelectorAll('.js-grid-item');
 
+const UP = 38;
+const RIGHT = 39;
+const DOWN = 40;
+const LEFT = 37;
+
 /* eslint-disable */
 function once(fn, context) {
   let result;
@@ -33,9 +38,10 @@ function flip(e) {
 
   // update poster
   if (!modalActive) {
-    const image = poster.querySelector('img').src;
-    movieFront.style.backgroundImage = `url('${image}')`;
-    movieBackPoster.style.backgroundImage = `url('${image}')`;
+    const image = poster.querySelector('img');
+    const src = typeof image.currentSrc !== 'undefined' ? image.currentSrc : image.src;
+    movieFront.style.backgroundImage = `url('${src}')`;
+    movieBackPoster.style.backgroundImage = `url('${src}')`;
 
     movieContainer.classList.add('movie-container--visible');
   }
@@ -88,3 +94,47 @@ for (let i = 0; i < items.length; i++) {
 movieContainer.addEventListener('click', () => {
   flip.bind(activeItem)();
 });
+
+/**
+ * Keyboard nav
+ */
+let top = null;
+let perRow;
+for (perRow = 0; perRow < items.length; perRow++) {
+  const newTop = items[perRow].getBoundingClientRect().top;
+  if (top !== null && newTop !== top) {
+    break;
+  }
+  top = newTop;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.which !== UP && e.which !== RIGHT && e.which !== DOWN && e.which !== LEFT) return;
+  const activeEl = document.activeElement;
+  if (!activeEl.closest('.grid-item')) {
+    items[0].focus();
+    return;
+  }
+  const currentIndex = getNodeIndex(activeEl.closest('.grid-item'));
+  let newIndex;
+  if (e.which === LEFT) {
+    newIndex = currentIndex - 1;
+  }
+  if (e.which === RIGHT) {
+    newIndex = currentIndex + 1;
+  }
+  if (e.which === DOWN) {
+    newIndex = currentIndex + perRow;
+  }
+  if (e.which === UP) {
+    newIndex = currentIndex - perRow;
+  }
+  if (newIndex >= 0 && newIndex < items.length) {
+    items[newIndex].focus();
+  }
+});
+
+function getNodeIndex(node) {
+  for (var i = 0; node = node.previousElementSibling; i++);
+  return i;
+}
