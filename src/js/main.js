@@ -14,6 +14,8 @@ const movieBackPoster = document.querySelector('.js-movie-back-poster');
 
 const items = document.querySelectorAll('.js-grid-item');
 
+let focusedItem = null;
+
 const UP = 38;
 const RIGHT = 39;
 const DOWN = 40;
@@ -92,6 +94,10 @@ function flip(e) {
 
       movieContainer.inert = true;
       main.inert = false;
+
+      if (focusedItem) {
+        focusedItem.focus();
+      }
     }));
   }
 
@@ -99,8 +105,14 @@ function flip(e) {
   activeItem = this;
 }
 
+function setFocusedItem(event) {
+  focusedItem = event.target.closest('.js-grid-item');
+}
+
 for (let i = 0; i < items.length; i++) {
   items[i].addEventListener('click', flip);
+
+  items[i].addEventListener('focus', setFocusedItem);
 }
 
 movieContainer.addEventListener('click', () => {
