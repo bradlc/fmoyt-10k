@@ -1,5 +1,7 @@
 import './_inert.js';
 
+let nextPage = 2;
+
 let modalActive = false;
 let activeItem = null;
 
@@ -12,6 +14,11 @@ const movieFront = document.querySelector('.js-movie-front');
 const movieBack = document.querySelector('.js-movie-back');
 const movieBackPoster = document.querySelector('.js-movie-back-poster');
 
+const movieTitle = document.querySelector('.js-movie-title');
+const movieOverview = document.querySelector('.js-movie-overview');
+const movieReleaseDate = document.querySelector('.js-movie-release-date');
+const movieLink = document.querySelector('.js-movie-link');
+
 const items = document.querySelectorAll('.js-grid-item');
 
 let focusedItem = null;
@@ -22,7 +29,20 @@ const DOWN = 40;
 const LEFT = 37;
 const ESC = 27;
 
-movieContainer.inert = true;
+if (!movieContainer.classList.contains('movie-container--single')) {
+  movieContainer.inert = true;
+}
+
+function formatDate(date) {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const year = date.substring(0, 4);
+  let month = date.substring(5, 7);
+  month = (month.substring(0, 1) === '0') ? month.substring(1) : month;
+  month = months[parseInt(month, 10) - 1];
+  let day = date.substring(8, 10);
+  day = (day.substring(0, 1) === '0') ? day.substring(1) : day;
+  return `${day} ${month} ${year}`;
+}
 
 /* eslint-disable */
 function once(fn, context) {
@@ -52,6 +72,20 @@ function debounce(func, wait, immediate) {
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
   };
+}
+
+function get(url, success) {
+  var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+  xhr.open('GET', url);
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState > 3 && xhr.status === 200) success(xhr.responseText);
+  };
+
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.send();
+
+  return xhr;
 }
 /* eslint-enable */
 
@@ -90,6 +124,16 @@ function flip(e) {
 
     movieContainer.inert = false;
     main.inert = true;
+
+    const href = e.target.closest('a').href;
+
+    get(href, data => {
+      const movieData = JSON.parse(data);
+      movieTitle.textContent = movieData.title;
+      movieOverview.textContent = movieData.overview;
+      movieReleaseDate.textContent = formatDate(movieData.release_date);
+      movieLink.href = `https://www.youtube.com/watch?v=${movieData.youtube_id}`;
+    });
 
     window.requestAnimationFrame(() => {
       movieContainer.classList.add('movie-container--animate');
@@ -134,6 +178,57 @@ for (let i = 0; i < items.length; i++) {
 movieContainer.addEventListener('click', () => {
   flip.bind(activeItem)();
 });
+
+/**
+ * Load more
+ */
+const loadMore = document.querySelector('.js-load-more');
+
+if (loadMore) {
+  loadMore.addEventListener('click', e => {
+    e.preventDefault();
+    get(e.target.closest('a').href, data => {
+      const movies = JSON.parse(data);
+      const els = document.createDocumentFragment();
+      for (let i = 0; i < movies.length; i++) {
+
+        const li = document.createElement('li');
+        li.classList.add('grid-item');
+
+        const a = document.createElement('a');
+        a.href = `/${movies[i].youtube_id}`;
+        a.classList.add('js-grid-item');
+
+        const div = document.createElement('div');
+        div.classList.add('grid-item__poster');
+        div.classList.add('js-grid-poster');
+
+        const img = document.createElement('img');
+        img.setAttribute('ix-src', `https://fmoyt-10k.imgix.net${movies[i].poster}?w=320&amp;h=480&amp;fit=crop&amp;auto=format,compress`);
+        img.alt = '';
+        img.setAttribute('sizes', '170px');
+        img.classList.add('lazyload');
+
+        const h3 = document.createElement('h3');
+        h3.textContent = movies[i].title;
+
+        els.innerHTML += `
+          <li class="grid-item">
+            <a href="/${movies[i].youtube_id}" class="js-grid-item">
+              <div class="grid-item__poster js-grid-poster">
+                <img ix-src="https://fmoyt-10k.imgix.net${movies[i].poster}?w=320&amp;h=480&amp;fit=crop&amp;auto=format,compress" alt="" sizes="170px" class="lazyload">
+              </div>
+              <h3>${movies[i].title}</h3>
+              <time datetime="2016" class="mono">${movies[i].release_date}</time>
+            </a>
+          </li>
+        `;
+      }
+      console.log(els);
+      loadMore.parentNode.insertBefore(els, loadMore);
+    });
+  });
+}
 
 /**
  * Keyboard nav

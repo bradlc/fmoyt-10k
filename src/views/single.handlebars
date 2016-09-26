@@ -1,0 +1,33 @@
+<div class="movie-container movie-container--visible movie-container--single js-movie-container">
+  <div class="movie-container__bg js-movie-container-bg"></div>
+  <div class="movie movie--flipped js-movie">
+    <div class="movie-inner js-movie-inner">
+      <div class="movie-front js-movie-front"></div>
+      <div class="movie-back js-movie-back">
+        <div class="movie-back__poster js-movie-back-poster"></div>
+        <h1>{{movie.title}}</h1>
+        <p class="movie__overview">{{movie.overview}}</p>
+        <div class="movie__meta">
+          <div>
+            <h3 class="mono">Release Date</h3>
+            <p>{{date movie.release_date}}</p>
+          </div>
+        </div>
+        <div class="movie__btns">
+          <button type="button" class="btn btn--secondary btn--icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
+            </svg>
+            Save
+          </button>
+          <a href="https://www.youtube.com/watch?v={{movie.youtube_id}}" class="btn btn--primary btn--icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            Watch Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

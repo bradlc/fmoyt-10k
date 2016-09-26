@@ -117,7 +117,7 @@
 }
 
 .movie-front {
-  background: url('https://image.tmdb.org/t/p/w640/dchLaUOkQOPZQHnus5fnZgZKDuP.jpg') center center no-repeat;
+  background: center center no-repeat;
   background-size: cover;
 
   .movie--flipped & {
@@ -134,7 +134,7 @@
 }
 
 .movie-back__poster {
-  background: url('https://image.tmdb.org/t/p/w640/dchLaUOkQOPZQHnus5fnZgZKDuP.jpg') center center no-repeat;
+  background: center center no-repeat;
   background-size: cover;
   position: absolute;
   z-index: 0;
