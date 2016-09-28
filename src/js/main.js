@@ -1,6 +1,6 @@
-import './_inert.js';
+/* global imgix */
 
-let nextPage = 2;
+import './_inert.js';
 
 let modalActive = false;
 let activeItem = null;
@@ -19,7 +19,8 @@ const movieOverview = document.querySelector('.js-movie-overview');
 const movieReleaseDate = document.querySelector('.js-movie-release-date');
 const movieLink = document.querySelector('.js-movie-link');
 
-const items = document.querySelectorAll('.js-grid-item');
+const grid = document.querySelector('.js-grid');
+let items = document.querySelectorAll('.js-grid-item');
 
 let focusedItem = null;
 
@@ -165,14 +166,18 @@ function flip(e) {
   activeItem = this;
 }
 
-function setFocusedItem(event) {
-  focusedItem = event.target.closest('.js-grid-item');
-}
+if (grid) {
+  grid.addEventListener('click', e => {
+    const item = e.target.closest('.js-grid-item');
+    if (item) {
+      e.preventDefault();
+      flip.bind(item, e)();
+    }
+  });
 
-for (let i = 0; i < items.length; i++) {
-  items[i].addEventListener('click', flip);
-
-  items[i].addEventListener('focus', setFocusedItem);
+  grid.addEventListener('focus', e => {
+    focusedItem = e.target.closest('.js-grid-item');
+  }, true);
 }
 
 movieContainer.addEventListener('click', () => {
@@ -187,11 +192,20 @@ const loadMore = document.querySelector('.js-load-more');
 if (loadMore) {
   loadMore.addEventListener('click', e => {
     e.preventDefault();
-    get(e.target.closest('a').href, data => {
+
+    const link = e.target.closest('a');
+    const href = link.href;
+
+    let currentPage = href.match(/[0-9]+$/);
+    currentPage = parseInt(currentPage[0], 10);
+    link.href = `/page/${currentPage + 1}`;
+
+    link.setAttribute('disabled', 'disabled');
+
+    get(href, data => {
       const movies = JSON.parse(data);
       const els = document.createDocumentFragment();
       for (let i = 0; i < movies.length; i++) {
-
         const li = document.createElement('li');
         li.classList.add('grid-item');
 
@@ -212,20 +226,31 @@ if (loadMore) {
         const h3 = document.createElement('h3');
         h3.textContent = movies[i].title;
 
-        els.innerHTML += `
-          <li class="grid-item">
-            <a href="/${movies[i].youtube_id}" class="js-grid-item">
-              <div class="grid-item__poster js-grid-poster">
-                <img ix-src="https://fmoyt-10k.imgix.net${movies[i].poster}?w=320&amp;h=480&amp;fit=crop&amp;auto=format,compress" alt="" sizes="170px" class="lazyload">
-              </div>
-              <h3>${movies[i].title}</h3>
-              <time datetime="2016" class="mono">${movies[i].release_date}</time>
-            </a>
-          </li>
-        `;
+        const year = movies[i].release_date.substring(0, 4);
+        const time = document.createElement('time');
+        time.setAttribute('datetime', year);
+        time.classList.add('mono');
+        time.textContent = year;
+
+        div.appendChild(img);
+        a.appendChild(div);
+        a.appendChild(h3);
+        a.appendChild(time);
+        li.appendChild(a);
+        els.appendChild(li);
       }
-      console.log(els);
-      loadMore.parentNode.insertBefore(els, loadMore);
+
+      grid.appendChild(els);
+      link.removeAttribute('disabled');
+
+      requestAnimationFrame(() => {
+        items = document.querySelectorAll('.js-grid-item');
+        imgix.init({
+          srcAttribute: 'data-src',
+          srcsetAttribute: 'data-srcset',
+          sizesAttribute: 'data-sizes',
+        });
+      });
     });
   });
 }

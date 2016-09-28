@@ -1,6 +1,7 @@
 .grid {
   font-size: 0;
   padding: 0 15px;
+  margin-top: 50px;
 }
 
 .grid-item {
@@ -66,21 +67,6 @@
 }
 
 .load-more {
-  .grid-item__poster {
-    background: none;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-  }
-}
-
-.load-more__text {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  line-height: 1;
-  font-size: 13px;
-  text-transform: uppercase;
-  margin-top: -6.5px;
-  opacity: 0.5;
   text-align: center;
+  margin: 30px;
 }

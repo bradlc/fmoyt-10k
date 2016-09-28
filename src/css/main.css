@@ -2,6 +2,7 @@
 @import 'partials/reset';
 @import 'partials/base';
 @import 'partials/helpers';
+@import 'partials/header';
 @import 'partials/grid';
 @import 'partials/movie';
 @import 'partials/btn';

@@ -1,5 +1,11 @@
+<header class="header">
+  <h1>
+    <svg class="logo" width="58" height="14" viewBox="259 183 29 7" aria-labelledby="h1"><title id="h1">fmoyt — full movies on YouTube</title><path d="M259,190 L259,183 L278,183 L278,185 L279,185 L279,183 L288,183 L288,186 L286,186 L286,190 L283,190 L283,186 L282,186 L282,188 L280,188 L280,190 L277,190 L277,188 L276,188 L276,190 L264,190 L264,188 L262,188 L262,190 L259,190 Z M260,189 L260,184 L264,184 L264,185 L261,185 L261,186 L264,186 L264,187 L261,187 L261,189 L260,189 Z M265,189 L265,184 L270,184 L270,189 L269,189 L269,185 L268,185 L268,189 L267,189 L267,185 L266,185 L266,189 L265,189 Z M271,189 L271,184 L275,184 L275,189 L271,189 Z M276,184 L277,184 L277,186 L280,186 L280,184 L281,184 L281,187 L279,187 L279,189 L278,189 L278,187 L276,187 L276,184 Z M282,184 L287,184 L287,185 L285,185 L285,189 L284,189 L284,185 L282,185 L282,184 Z M272,185 L274,185 L274,188 L272,188 L272,185 Z" stroke="none" fill-rule="evenodd"></path></svg>
+  </h1>
+</header>
+
 <main class="js-main">
-  <ul class="grid">
+  <ul class="grid js-grid">
     {{#each movies}}
     <li class="grid-item">
       <a href="/{{youtube_id}}" class="js-grid-item">
@@ -7,18 +13,14 @@
           <img ix-src="https://fmoyt-10k.imgix.net{{poster}}?w=320&amp;h=480&amp;fit=crop&amp;auto=format,compress" alt="" sizes="170px" class="lazyload">
         </div>
         <h3>{{title}}</h3>
-        <time datetime="2016" class="mono">{{year release_date}}</time>
+        <time datetime="{{year release_date}}" class="mono">{{year release_date}}</time>
       </a>
     </li>
     {{/each}}
-    <li class="grid-item load-more mono">
-      <a href="/page/2" class="js-load-more">
-        <div class="grid-item__poster js-grid-poster">
-          <span class="load-more__text">Load More</span>
-        </div>
-      </a>
-    </li>
   </ul>
+  <div class="load-more">
+    <a href="/page/2" class="btn btn--primary js-load-more">Load More</a>
+  </div>
 </main>
 
 <div class="movie-container js-movie-container" aria-hidden="true">

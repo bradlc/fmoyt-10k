@@ -1,0 +1,16 @@
+.header {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  padding: 0 30px;
+  background: color($background-color shade(25%));
+  background: rgba(26, 32, 37, 0.9);
+}
+
+.logo {
+  margin-top: 18px;
+  fill: rgba(255, 255, 255, 0.4);
+}
