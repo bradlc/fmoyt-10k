@@ -1,9 +1,11 @@
 /* global imgix */
 
 import './_inert.js';
+import './_idb_keyval.js';
 
 let modalActive = false;
 let activeItem = null;
+let activeMovie = null;
 
 const main = document.querySelector('.js-main');
 const movieContainer = document.querySelector('.js-movie-container');
@@ -21,6 +23,11 @@ const movieLink = document.querySelector('.js-movie-link');
 
 const grid = document.querySelector('.js-grid');
 let items = document.querySelectorAll('.js-grid-item');
+
+const saveBtn = document.querySelector('.js-save');
+const saveBtnText = document.querySelector('.js-save .btn__text');
+const saveBtnIcon = document.querySelector('.js-save .btn__icon');
+let savedCount = 0;
 
 let focusedItem = null;
 
@@ -134,6 +141,17 @@ function flip(e) {
       movieOverview.textContent = movieData.overview;
       movieReleaseDate.textContent = formatDate(movieData.release_date);
       movieLink.href = `https://www.youtube.com/watch?v=${movieData.youtube_id}`;
+
+      activeMovie = {
+        title: movieData.title,
+        overview: movieData.overview,
+        poster: movieData.poster,
+        release_date: movieData.release_date,
+        id: movieData.youtube_id,
+      };
+
+      saveBtn.setAttribute('data-title', movieData.title);
+      saveBtn.setAttribute('data-id', movieData.youtube_id);
     });
 
     window.requestAnimationFrame(() => {
@@ -167,7 +185,7 @@ function flip(e) {
 }
 
 if (grid) {
-  grid.addEventListener('click', e => {
+  window.addEventListener('click', e => {
     const item = e.target.closest('.js-grid-item');
     if (item) {
       e.preventDefault();
@@ -180,7 +198,7 @@ if (grid) {
   }, true);
 }
 
-movieContainer.addEventListener('click', () => {
+movieContainerBg.addEventListener('click', () => {
   flip.bind(activeItem)();
 });
 
@@ -188,6 +206,42 @@ movieContainer.addEventListener('click', () => {
  * Load more
  */
 const loadMore = document.querySelector('.js-load-more');
+
+function createGridItem(id, poster, title, releaseDate) {
+  const li = document.createElement('li');
+  li.classList.add('grid-item');
+
+  const a = document.createElement('a');
+  a.href = `/${id}`;
+  a.classList.add('js-grid-item');
+
+  const div = document.createElement('div');
+  div.classList.add('grid-item__poster');
+  div.classList.add('js-grid-poster');
+
+  const img = document.createElement('img');
+  img.setAttribute('ix-src', `https://fmoyt-10k.imgix.net${poster}?w=320&amp;h=480&amp;fit=crop&amp;auto=format,compress`);
+  img.alt = '';
+  img.setAttribute('sizes', '170px');
+  img.classList.add('lazyload');
+
+  const h3 = document.createElement('h3');
+  h3.textContent = title;
+
+  const year = releaseDate.substring(0, 4);
+  const time = document.createElement('time');
+  time.setAttribute('datetime', year);
+  time.classList.add('mono');
+  time.textContent = year;
+
+  div.appendChild(img);
+  a.appendChild(div);
+  a.appendChild(h3);
+  a.appendChild(time);
+  li.appendChild(a);
+
+  return li;
+}
 
 if (loadMore) {
   loadMore.addEventListener('click', e => {
@@ -206,37 +260,7 @@ if (loadMore) {
       const movies = JSON.parse(data);
       const els = document.createDocumentFragment();
       for (let i = 0; i < movies.length; i++) {
-        const li = document.createElement('li');
-        li.classList.add('grid-item');
-
-        const a = document.createElement('a');
-        a.href = `/${movies[i].youtube_id}`;
-        a.classList.add('js-grid-item');
-
-        const div = document.createElement('div');
-        div.classList.add('grid-item__poster');
-        div.classList.add('js-grid-poster');
-
-        const img = document.createElement('img');
-        img.setAttribute('ix-src', `https://fmoyt-10k.imgix.net${movies[i].poster}?w=320&amp;h=480&amp;fit=crop&amp;auto=format,compress`);
-        img.alt = '';
-        img.setAttribute('sizes', '170px');
-        img.classList.add('lazyload');
-
-        const h3 = document.createElement('h3');
-        h3.textContent = movies[i].title;
-
-        const year = movies[i].release_date.substring(0, 4);
-        const time = document.createElement('time');
-        time.setAttribute('datetime', year);
-        time.classList.add('mono');
-        time.textContent = year;
-
-        div.appendChild(img);
-        a.appendChild(div);
-        a.appendChild(h3);
-        a.appendChild(time);
-        li.appendChild(a);
+        const li = createGridItem(movies[i].youtube_id, movies[i].poster, movies[i].title, movies[i].release_date);
         els.appendChild(li);
       }
 
@@ -311,3 +335,82 @@ function getNodeIndex(node) {
   for (var i = 0; node = node.previousElementSibling; i++);
   return i;
 }
+
+
+/**
+ * Save
+ */
+saveBtn.addEventListener('click', e => {
+  const btn = e.target.closest('.js-save');
+  idbKeyval.get('fmoyt-saved').then(saved => {
+    let save;
+    if (typeof saved === 'undefined') {
+      save = [];
+    } else {
+      save = saved.slice(0);
+    }
+    save.push(activeMovie);
+    idbKeyval.set('fmoyt-saved', save).then(_ => console.log('saved'));
+
+    saveBtnText.textContent = 'Saved';
+    saveBtnIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>`;
+  });
+});
+
+
+const header = document.querySelector('.js-header');
+const tablist = document.querySelector('.js-tablist');
+
+idbKeyval.get('fmoyt-saved').then(saved => {
+  if (typeof saved === 'undefined') {
+    return;
+  }
+  savedCount = saved.length;
+
+  tablist.innerHTML = `<ul role="tablist">
+      <li role="presentation">
+        <a class="js-tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All</a>
+      </li>
+      <li role="presentation">
+        <a class="js-tab" href="#saved" role="tab" aria-controls="saved">Saved (${savedCount})</a>
+      </li>
+    </ul>`;
+});
+
+window.addEventListener('click', e => {
+  if (e.target.closest('.js-tab')) {
+    e.preventDefault();
+    const tabs = document.querySelectorAll('.js-tab');
+    const panels = document.querySelectorAll('[role="tabpanel"]');
+    for (let i = 0; i < tabs.length; i++) {
+      tabs[i].removeAttribute('aria-selected');
+    }
+    e.target.closest('.js-tab').setAttribute('aria-selected', 'true');
+
+    for (let i = 0; i < panels.length; i++) {
+      panels[i].setAttribute('aria-hidden', 'true');
+    }
+    document.querySelector(e.target.closest('.js-tab').getAttribute('href')).removeAttribute('aria-hidden');
+  }
+});
+
+
+idbKeyval.get('fmoyt-saved').then(saved => {
+  if (saved) {
+    const ul = document.createElement('ul');
+    ul.classList.add('grid');
+    for (let i = 0; i < saved.length; i++) {
+      const li = createGridItem(saved[i].id, saved[i].poster, saved[i].title, saved[i].release_date);
+      ul.appendChild(li);
+    }
+    document.querySelector('.js-saved').appendChild(ul);
+    requestAnimationFrame(() => {
+      items = document.querySelectorAll('.js-grid-item');
+      imgix.init({
+        srcAttribute: 'data-src',
+        srcsetAttribute: 'data-srcset',
+        sizesAttribute: 'data-sizes',
+      });
+    });
+  }
+});

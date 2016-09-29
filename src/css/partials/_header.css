@@ -1,6 +1,6 @@
 .header {
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   top: 0;
   left: 0;
   right: 0;
@@ -8,13 +8,44 @@
   padding: 0 30px;
   background: color($background-color shade(25%));
   background: rgba(26, 32, 37, 0.9);
+  display: flex;
+  align-items: center;
 
   @media (max-width: 450px) {
     padding: 0 20px;
   }
+
+  h1 {
+    line-height: 1;
+    height: 14px;
+  }
 }
 
 .logo {
-  margin-top: 18px;
   fill: rgba(255, 255, 255, 0.4);
+}
+
+
+.tabs {
+  margin-left: auto;
+  line-height: 1;
+
+  ul {
+    display: flex;
+  }
+
+  li {
+    margin-left: 20px;
+  }
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.4;
+    word-spacing: -0.4em;
+
+    &[aria-selected] {
+      opacity: 0.8;
+    }
+  }
 }
