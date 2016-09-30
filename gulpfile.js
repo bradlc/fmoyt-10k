@@ -21,7 +21,7 @@ gulp.task('css:lint', () => {
 gulp.task('css', () => {
   return gulp.src('./src/css/main.css')
     .pipe(sourcemaps.init())
-    .pipe(postcss([autoprefixer, precss]))
+    .pipe(postcss([precss]))
     .pipe(cleancss())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./webroot/css'));

@@ -452,6 +452,7 @@ function getNodeIndex(node) {
 /**
  * Save
  */
+saveBtn.style.display = 'inline-block';
 saveBtn.addEventListener('click', e => {
   const btn = e.target.closest('.js-save');
   idbKeyval.get('fmoyt-saved').then(saved => {

@@ -5,22 +5,43 @@
       <div class="movie-front js-movie-front"></div>
       <div class="movie-back js-movie-back">
         <div class="movie-back__poster js-movie-back-poster"></div>
-        <h1>{{movie.title}}</h1>
-        <p class="movie__overview">{{movie.overview}}</p>
-        <div class="movie__meta">
-          <div>
-            <h3 class="mono">Release Date</h3>
-            <p>{{date movie.release_date}}</p>
+        <div class="movie__info">
+          <h1 class="js-movie-title">{{movie.title}}</h1>
+          <p class="movie__overview js-movie-overview">{{movie.overview}}</p>
+          <div class="movie__meta">
+            <div>
+              <h3 class="mono">Runtime</h3>
+              <p class="js-movie-runtime">{{movie.runtime}} mins</p>
+            </div>
+            <div>
+              <h3 class="mono">Release Date</h3>
+              <p class="js-movie-release-date">{{date movie.release_date}}</p>
+            </div>
+            <div>
+              <h3 class="mono">Genre</h3>
+              <p class="js-movie-genre">{{genres movie.genres}}</p>
+            </div>
+            <div>
+              <h3 class="mono">Starring</h3>
+              <p class="js-movie-starring">{{cast movie.cast}}</p>
+            </div>
+            <div>
+              <h3 class="mono">Director</h3>
+              <p class="js-movie-director">{{director movie.directors}}</p>
+            </div>
+            <div>
+              <a href="http://www.imdb.com/title/{{movie.imdbId}}/" target="_blank" class="mono js-imdb">View on IMDb</a>
+            </div>
           </div>
         </div>
         <div class="movie__btns">
-          <button type="button" class="btn btn--secondary btn--icon">
-            <svg viewBox="0 0 24 24">
+          <button type="button" class="btn btn--secondary btn--icon js-save" data-title="" data-id="">
+            <span class="btn__icon"><svg viewBox="0 0 24 24">
               <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
-            </svg>
-            Save
+            </svg></span>
+            <span class="btn__text">Save</span>
           </button>
-          <a href="https://www.youtube.com/watch?v={{movie.youtube_id}}" class="btn btn--primary btn--icon">
+          <a href="#" class="btn btn--primary btn--icon js-movie-link">
             <svg viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z"/>
             </svg>

@@ -139,6 +139,10 @@
     padding: 20px;
   }
 
+  button {
+    display: none;
+  }
+
   a {
     margin-left: 10px;
   }

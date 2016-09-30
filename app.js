@@ -1,5 +1,27 @@
 'use strict';
 
+const genres = {
+  x28: 'Action',
+  x12: 'Adventure',
+  x16: 'Animation',
+  x35: 'Comedy',
+  x80: 'Crime',
+  x99: 'Documentary',
+  x18: 'Drama',
+  x10751: 'Family',
+  x14: 'Fantasy',
+  x36: 'History',
+  x27: 'Horror',
+  x10402: 'Music',
+  x9648: 'Mystery',
+  x10749: 'Romance',
+  x878: 'Science Fiction',
+  x10770: 'TV Movie',
+  x53: 'Thriller',
+  x10752: 'War',
+  x37: 'Western',
+};
+
 const fs = require('fs');
 const express = require('express');
 const compression = require('compression');
@@ -22,6 +44,27 @@ app.engine('handlebars', hbs({
       let day = date.substring(8, 10);
       day = (day.substring(0, 1) === '0') ? day.substring(1) : day;
       return `${day} ${month} ${year}`;
+    },
+
+    cast: cast => {
+      if (cast && cast.length) {
+        return cast.join(', ');
+      }
+      return '–';
+    },
+
+    director: director => {
+      if (director && director.length) {
+        return director.join(', ');
+      }
+      return '–';
+    },
+
+    genres: genreIds => {
+      if (genreIds && genreIds.length) {
+        return genreIds.map(id => genres[`x${id}`]).join(', ');
+      }
+      return '–';
     },
   },
 }));
