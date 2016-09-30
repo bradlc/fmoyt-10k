@@ -45,6 +45,10 @@ const movieTitle = document.querySelector('.js-movie-title');
 const movieOverview = document.querySelector('.js-movie-overview');
 const movieReleaseDate = document.querySelector('.js-movie-release-date');
 const movieGenre = document.querySelector('.js-movie-genre');
+const movieStarring = document.querySelector('.js-movie-starring');
+const movieDirector = document.querySelector('.js-movie-director');
+const movieRuntime = document.querySelector('.js-movie-runtime');
+const movieIMDB = document.querySelector('.js-imdb');
 const movieLink = document.querySelector('.js-movie-link');
 
 const grid = document.querySelector('.js-grid');
@@ -183,6 +187,31 @@ function flip(e) {
         }).join(', ');
       }
       movieGenre.textContent = genreStr;
+
+      let cast = '–';
+      if (movieData.cast && movieData.cast.length) {
+        cast = movieData.cast.join(', ');
+      }
+      movieStarring.textContent = cast;
+
+      let director = '–';
+      if (movieData.directors && movieData.directors.length) {
+        director = movieData.directors.join(', ');
+      }
+      movieDirector.textContent = director;
+
+      let runtime = '–';
+      if (movieData.runtime) {
+        runtime = `${movieData.runtime} mins`;
+      }
+      movieRuntime.textContent = runtime;
+
+      if (movieData.imdbId) {
+        movieIMDB.href = `http://www.imdb.com/title/${movieData.imdbId}/`;
+        movieIMDB.style.display = 'inline';
+      } else {
+        movieIMDB.style.display = 'none';
+      }
 
       movieLink.href = `https://www.youtube.com/watch?v=${movieData.youtube_id}`;
 
