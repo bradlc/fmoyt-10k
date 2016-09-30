@@ -118,6 +118,8 @@ function flip(e) {
     movieBackPoster.style.backgroundImage = `url('${src}')`;
 
     movieContainer.classList.add('movie-container--visible');
+
+    document.body.classList.add('no-scroll');
   }
 
   const fromRect = movie.getBoundingClientRect();
@@ -191,6 +193,7 @@ function flip(e) {
       poster.style.opacity = 1;
       movieContainer.classList.remove('movie-container--animate');
       movieContainer.classList.remove('movie-container--visible');
+      document.body.classList.remove('no-scroll');
       movie.style.transform = 'none';
       movieInner.style.transform = 'none';
 

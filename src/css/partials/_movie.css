@@ -6,6 +6,8 @@
   bottom: 0;
   left: 0;
   display: none;
+  padding: 20px;
+  overflow: auto;
 }
 
 .movie-container--visible {
@@ -14,7 +16,7 @@
 
 .movie-container__bg {
   background: rgba(34, 43, 49, 0.98);
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -79,10 +81,15 @@
 }
 
 .movie h1 {
-  font-size: 44px;
+  font-size: 38px;
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 30px;
+
+  @media (max-width: 399px) {
+    font-size: 26px;
+    max-width: calc(100% - 25px);
+  }
 }
 
 .movie__overview {
@@ -114,6 +121,35 @@
 .movie__btns {
   text-align: right;
   margin-top: 30px;
+  position: absolute !important;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 26px 35px;
+  background: color(rgb(34, 43, 49) tint(3%));
+
+  @media (max-width: 399px) {
+    padding: 20px;
+  }
+
+  a {
+    margin-left: 10px;
+  }
+}
+
+.movie__info {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 96px;
+  padding: 35px;
+  overflow: auto;
+
+  @media (max-width: 399px) {
+    padding: 20px;
+    bottom: 84px;
+  }
 }
 
 .movie-front {
@@ -127,6 +163,7 @@
 
 .movie-back {
   transform: rotateY(180deg);
+  overflow: hidden;
 
   .movie--flipped & {
     transform: rotateY(360deg);
@@ -154,12 +191,17 @@
   border: 0;
   border-radius: 0;
   position: absolute !important;
-  z-index: 2;
+  z-index: 2 !important;
   top: 20px;
   right: 20px;
   width: 24px;
   height: 24px;
   cursor: pointer;
+
+  @media (max-width: 399px) {
+    top: 13px;
+    right: 13px;
+  }
 
   svg {
     fill: rgba(255, 255, 255, 0.5);
