@@ -4,10 +4,12 @@ import './_inert.js';
 import './_idb_keyval.js';
 
 let modalActive = false;
+let videoActive = false;
 let activeItem = null;
 let activeMovie = null;
 
 const main = document.querySelector('.js-main');
+const header = document.querySelector('.js-header');
 const movieContainer = document.querySelector('.js-movie-container');
 const movieContainerBg = document.querySelector('.js-movie-container-bg');
 const movie = document.querySelector('.js-movie');
@@ -29,6 +31,9 @@ const saveBtnText = document.querySelector('.js-save .btn__text');
 const saveBtnIcon = document.querySelector('.js-save .btn__icon');
 let savedCount = 0;
 
+const watch = document.querySelector('.js-watch');
+const iframe = document.querySelector('.js-iframe');
+
 let focusedItem = null;
 
 const UP = 38;
@@ -40,6 +45,8 @@ const ESC = 27;
 if (!movieContainer.classList.contains('movie-container--single')) {
   movieContainer.inert = true;
 }
+
+watch.inert = true;
 
 function formatDate(date) {
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -132,6 +139,7 @@ function flip(e) {
 
     movieContainer.inert = false;
     main.inert = true;
+    header.inert = true;
 
     const href = e.target.closest('a').href;
 
@@ -149,6 +157,19 @@ function flip(e) {
         release_date: movieData.release_date,
         id: movieData.youtube_id,
       };
+
+      idbKeyval.get('fmoyt-saved').then(saved => {
+        if (!saved || typeof saved === 'undefined') return;
+
+        for (let i = 0; i < saved.length; i++) {
+          if (saved[i].id === movieData.youtube_id) {
+            saveBtnText.textContent = 'Saved';
+            saveBtnIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>`;
+            saveBtn.disabled = true;
+            break;
+          }
+        }
+      });
 
       saveBtn.setAttribute('data-title', movieData.title);
       saveBtn.setAttribute('data-id', movieData.youtube_id);
@@ -173,6 +194,12 @@ function flip(e) {
 
       movieContainer.inert = true;
       main.inert = false;
+      header.inert = false;
+
+      // reset save button
+      saveBtnText.textContent = 'Save';
+      saveBtnIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>`;
+      saveBtn.disabled = false;
 
       if (focusedItem) {
         focusedItem.focus();
@@ -199,6 +226,10 @@ if (grid) {
 }
 
 movieContainerBg.addEventListener('click', () => {
+  flip.bind(activeItem)();
+});
+
+document.querySelector('.js-close-movie').addEventListener('click', () => {
   flip.bind(activeItem)();
 });
 
@@ -255,6 +286,10 @@ if (loadMore) {
     link.href = `/page/${currentPage + 1}`;
 
     link.setAttribute('disabled', 'disabled');
+
+    if (currentPage === 20) {
+      link.style.display = 'none';
+    }
 
     get(href, data => {
       const movies = JSON.parse(data);
@@ -326,6 +361,16 @@ document.addEventListener('keydown', e => {
 });
 
 document.addEventListener('keydown', e => {
+  if (e.which === ESC && videoActive) {
+    videoActive = false;
+    watch.classList.remove('watch--active');
+    watch.addEventListener('transitionend', once(() => {
+      iframe.src = '';
+      watch.inert = true;
+      movieContainer.inert = false;
+    }));
+    return;
+  }
   if (e.which === ESC && modalActive) {
     flip.bind(activeItem)();
   }
@@ -354,25 +399,41 @@ saveBtn.addEventListener('click', e => {
 
     saveBtnText.textContent = 'Saved';
     saveBtnIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>`;
+    saveBtn.disabled = true;
+
+    // add to saved grid
+    const li = createGridItem(activeMovie.id, activeMovie.poster, activeMovie.title, activeMovie.release_date);
+    document.querySelector('.js-saved-grid').appendChild(li);
+
+    savedCount++;
+    document.querySelector('.js-saved-tab').textContent = `Saved (${savedCount})`;
+
+    requestAnimationFrame(() => {
+      items = document.querySelectorAll('.js-grid-item');
+      imgix.init({
+        srcAttribute: 'data-src',
+        srcsetAttribute: 'data-srcset',
+        sizesAttribute: 'data-sizes',
+      });
+    });
   });
 });
 
 
-const header = document.querySelector('.js-header');
+
 const tablist = document.querySelector('.js-tablist');
 
 idbKeyval.get('fmoyt-saved').then(saved => {
-  if (typeof saved === 'undefined') {
-    return;
+  if (saved && typeof saved !== 'undefined') {
+    savedCount = saved.length;
   }
-  savedCount = saved.length;
 
   tablist.innerHTML = `<ul role="tablist">
       <li role="presentation">
         <a class="js-tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All</a>
       </li>
       <li role="presentation">
-        <a class="js-tab" href="#saved" role="tab" aria-controls="saved">Saved (${savedCount})</a>
+        <a class="js-tab js-saved-tab" href="#saved" role="tab" aria-controls="saved">Saved (${savedCount})</a>
       </li>
     </ul>`;
 });
@@ -397,13 +458,12 @@ window.addEventListener('click', e => {
 
 idbKeyval.get('fmoyt-saved').then(saved => {
   if (saved) {
-    const ul = document.createElement('ul');
-    ul.classList.add('grid');
+    const ul = document.createDocumentFragment();
     for (let i = 0; i < saved.length; i++) {
       const li = createGridItem(saved[i].id, saved[i].poster, saved[i].title, saved[i].release_date);
       ul.appendChild(li);
     }
-    document.querySelector('.js-saved').appendChild(ul);
+    document.querySelector('.js-saved-grid').appendChild(ul);
     requestAnimationFrame(() => {
       items = document.querySelectorAll('.js-grid-item');
       imgix.init({
@@ -413,4 +473,28 @@ idbKeyval.get('fmoyt-saved').then(saved => {
       });
     });
   }
+});
+
+
+movieLink.addEventListener('click', e => {
+  e.preventDefault();
+
+  watch.inert = false;
+  movieContainer.inert = true;
+  videoActive = true;
+  watch.classList.add('watch--active');
+  watch.addEventListener('transitionend', once(() => {
+    iframe.src = `https://www.youtube.com/embed/${activeMovie.id}?autoplay=1`;
+  }));
+});
+
+
+document.querySelector('.js-close-watch').addEventListener('click', () => {
+  videoActive = false;
+  watch.classList.remove('watch--active');
+  watch.addEventListener('transitionend', once(() => {
+    iframe.src = '';
+    watch.inert = true;
+    movieContainer.inert = false;
+  }));
 });

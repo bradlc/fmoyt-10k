@@ -145,3 +145,33 @@
   opacity: 0.04;
   transform: scaleX(-1);
 }
+
+.movie-close,
+.watch-close {
+  appearance: none;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  position: absolute !important;
+  z-index: 2;
+  top: 20px;
+  right: 20px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+
+  svg {
+    fill: rgba(255, 255, 255, 0.5);
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover svg {
+    fill: #fff;
+  }
+}
+
+.watch-close {
+  background: rgba(0, 0, 0, 0.8);
+}
