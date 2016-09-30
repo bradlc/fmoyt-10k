@@ -10,6 +10,7 @@ let activeMovie = null;
 
 const main = document.querySelector('.js-main');
 const header = document.querySelector('.js-header');
+const footer = document.querySelector('.js-footer');
 const movieContainer = document.querySelector('.js-movie-container');
 const movieContainerBg = document.querySelector('.js-movie-container-bg');
 const movie = document.querySelector('.js-movie');
@@ -140,6 +141,7 @@ function flip(e) {
     movieContainer.inert = false;
     main.inert = true;
     header.inert = true;
+    footer.inert = true;
 
     const href = e.target.closest('a').href;
 
@@ -195,6 +197,7 @@ function flip(e) {
       movieContainer.inert = true;
       main.inert = false;
       header.inert = false;
+      footer.inert = false;
 
       // reset save button
       saveBtnText.textContent = 'Save';
