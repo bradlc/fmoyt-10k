@@ -17,12 +17,29 @@
   margin-top: 30px;
   position: relative;
 
-  flex: 1 1 200px;
+  flex: 0 0 50%;
   min-width: 0;
 
-  @media (max-width: 500px) {
-    flex: 0 0 50%;
+  @media (min-width: 640px) {
+    flex-basis: 33.3333333%;
   }
+
+  @media (min-width: 840px) {
+    flex-basis: 25%;
+  }
+
+  @media (min-width: 1050px) {
+    flex-basis: 20%;
+  }
+
+  @media (min-width: 1400px) {
+    flex-basis: 16.6666666%;
+  }
+
+  @media (min-width: 1700px) {
+    flex-basis: 14.285714286%;
+  }
+
   @media (max-width: 450px) {
     padding: 0 10px;
   }
