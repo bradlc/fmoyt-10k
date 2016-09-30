@@ -1,5 +1,27 @@
 /* global imgix */
 
+const genres = {
+  x28: 'Action',
+  x12: 'Adventure',
+  x16: 'Animation',
+  x35: 'Comedy',
+  x80: 'Crime',
+  x99: 'Documentary',
+  x18: 'Drama',
+  x10751: 'Family',
+  x14: 'Fantasy',
+  x36: 'History',
+  x27: 'Horror',
+  x10402: 'Music',
+  x9648: 'Mystery',
+  x10749: 'Romance',
+  x878: 'Science Fiction',
+  x10770: 'TV Movie',
+  x53: 'Thriller',
+  x10752: 'War',
+  x37: 'Western',
+};
+
 import './_inert.js';
 import './_idb_keyval.js';
 
@@ -22,6 +44,7 @@ const movieBackPoster = document.querySelector('.js-movie-back-poster');
 const movieTitle = document.querySelector('.js-movie-title');
 const movieOverview = document.querySelector('.js-movie-overview');
 const movieReleaseDate = document.querySelector('.js-movie-release-date');
+const movieGenre = document.querySelector('.js-movie-genre');
 const movieLink = document.querySelector('.js-movie-link');
 
 const grid = document.querySelector('.js-grid');
@@ -152,6 +175,15 @@ function flip(e) {
       movieTitle.textContent = movieData.title;
       movieOverview.textContent = movieData.overview;
       movieReleaseDate.textContent = formatDate(movieData.release_date);
+
+      let genreStr = '–';
+      if (movieData.genres.length) {
+        genreStr = movieData.genres.map(id => {
+          return genres[`x${id}`];
+        }).join(', ');
+      }
+      movieGenre.textContent = genreStr;
+
       movieLink.href = `https://www.youtube.com/watch?v=${movieData.youtube_id}`;
 
       activeMovie = {
